@@ -1,0 +1,34 @@
+name: PHP Psalm analysis
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - stable*
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ["7.4", "8.0", "8.1"]
+    name: php-psalm-analysis
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer i
+
+      - name: Install nextcloud/ocp
+        run: composer require --dev nextcloud/ocp:${{ matrix.ocp-version }}
+
+      - name: Run coding standards check
+        run: composer run psalm

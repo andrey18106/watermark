@@ -1,0 +1,25 @@
+name: Lint XML
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - stable*
+  workflow_dispatch:
+
+jobs:
+  xml-linters:
+    runs-on: ubuntu-latest
+
+    name: info.xml lint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download xml appinfo schema
+        run: wget https://raw.githubusercontent.com/nextcloud/appstore/master/nextcloudappstore/api/v1/release/info.xsd
+
+      - name: Lint appinfo/info.xml
+        uses: ChristophWurst/xmllint-action@v1
+        with:
+          xml-file: ./appinfo/info.xml
+          xml-schema-file: ./info.xsd

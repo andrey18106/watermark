@@ -1,0 +1,22 @@
+name: Lint Stylelint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - stable*
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    name: stylelint
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run stylelint
